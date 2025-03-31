@@ -135,7 +135,8 @@ class StampedeAnalyzer:
     #         for i, (yolo, crowd) in enumerate(zip(yolo_counts, crowd_counts)):
     #             f.write(f"{i}\t{yolo}\t{crowd}\n")
 
-    def save_counts_to_file(self, yolo_counts, crowd_counts):
+    def save_counts_to_file(self, yolo_counts):
+    # def save_counts_to_file(self, yolo_counts, crowd_counts):
         """Save counts to a CSV file, incorporating pre-existing Target values"""
         # Path to the original labels.csv
         original_csv = os.path.join(self.output_dir, 'labels.csv')
@@ -155,15 +156,20 @@ class StampedeAnalyzer:
         with open(new_csv, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
             # Write the header
-            writer.writerow(['Image', 'yolo', 'mrcnn', 'target'])
+            writer.writerow(['Image', 'yolo', 'target'])
+            # writer.writerow(['Image', 'yolo', 'mrcnn', 'target'])
             
             # Write the data
-            for i, (yolo, crowd) in enumerate(zip(yolo_counts, crowd_counts)):
+            # for i, (crowd) in enumerate(zip(crowd_counts)):
+            for i, (yolo) in enumerate(zip(yolo_counts)):
+            # for i, (yolo, crowd) in enumerate(zip(yolo_counts, crowd_counts)):
                 # Assuming the image names are in the format '1.jpg', '2.jpg', etc.
                 image_name = f'{i+1}.jpg'
                 # Retrieve the target value from the dictionary
                 target = target_values.get(image_name, 'Unknown')  # Default to 'Unknown' if not found
-                writer.writerow([image_name, yolo, crowd, target])
+                writer.writerow([image_name, yolo, target])
+                # writer.writerow([image_name, crowd, target])
+                # writer.writerow([image_name, yolo, crowd, target])
 
     def analyze(self):
         """Main analysis pipeline"""
@@ -171,15 +177,18 @@ class StampedeAnalyzer:
         yolo_counts = self.run_yolo_detection()
         
         # Run crowd counting
-        crowd_counts = self.run_crowd_counting()
+        # crowd_counts = self.run_crowd_counting()
         
         # Generate comparison graph
-        self.generate_comparison_graph(yolo_counts, crowd_counts)
+        # self.generate_comparison_graph(yolo_counts, crowd_counts)
         
         # Save counts to file
-        self.save_counts_to_file(yolo_counts, crowd_counts)
+        # self.save_counts_to_file(yolo_counts, crowd_counts)
+        self.save_counts_to_file(yolo_counts)
+        # self.save_counts_to_file(crowd_counts)
         
-        return yolo_counts, crowd_counts
+        return crowd_counts
+        # return yolo_counts, crowd_counts
 
 def main():
     # Paths - adjust these to your specific setup
@@ -196,7 +205,9 @@ def main():
     )
 
     # Run analysis
-    yolo_counts, crowd_counts = analyzer.analyze()
+    # yolo_counts, crowd_counts = analyzer.analyze()
+    yolo_counts = analyzer.analyze()
+    # crowd_counts = analyzer.analyze()
     os.rename(os.path.join(output_dir, 'labels_new.csv'), os.path.join(output_dir, 'labels.csv'))
 
 
