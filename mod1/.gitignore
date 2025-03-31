@@ -1,0 +1,38 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environment directories
+env/
+venv/
+*.env
+
+# Ignore TensorFlow and PyTorch model files
+*.h5
+*.pb
+*.pth
+*.ckpt
+
+# Ignore output frames and video files
+*.avi
+*.mp4
+
+# Ignore log files
+*.log
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore other temporary files
+*.bak
+*.swp
+*.swo
+
+# Ignore IDE specific files (e.g., VSCode, PyCharm)
+.vscode/
+.idea/
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
